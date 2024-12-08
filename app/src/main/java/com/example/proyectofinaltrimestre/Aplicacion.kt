@@ -3,6 +3,7 @@ package com.example.proyectofinaltrimestre
 import android.app.Application
 import android.content.Context
 import com.example.proyectofinaltrimestre.providers.db.MyDatabase
+import com.google.firebase.FirebaseApp
 
 class Aplicacion: Application() {
     companion object{

@@ -18,12 +18,14 @@ import com.example.proyectofinaltrimestre.providers.db.CrudPerfil
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: LoginLayoutBinding
 
-    private lateinit var auth: FirebaseAuth
+    private var email = ""
+    private var pass = ""
 
     private  val responseLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode== RESULT_OK){
@@ -77,8 +79,6 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        crearPerfil()
-
         // Configurar botón Limpiar
         binding.limpiar.setOnClickListener {
             limpiarCampos()
@@ -86,7 +86,11 @@ class LoginActivity : AppCompatActivity() {
 
         // Configurar botón Iniciar Sesión
         binding.iniciarsesion.setOnClickListener {
-            validarCampos()
+            login()
+        }
+
+        binding.registrar.setOnClickListener {
+            registrar()
         }
 
         binding.btnGoogleSignIn.setOnClickListener{
@@ -94,16 +98,49 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun crearPerfil(){
-        CrudPerfil().borrar(1)
-        //Creamos el usuario predeterminado
+    //----------------------------------------------------------------------------------------------
+    private fun registrar() {
+        if(!datosCorrectos()) return
+        //datos correctos, procedemos a registar al usuario
+        crearPerfil(email, pass)
+        irActivityDrawer()
+    }
+
+    //----------------------------------------------------------------------------------------------
+    private fun login() {
+        if(!datosCorrectos()) return
+        //LOs datos ya estan validados
+        //vamos a logear al usuario
+        val p = CrudPerfil().seekByLogin(email)
+        if (p != null && p.password == pass) {
+            irActivityDrawer()
+        }
+    }
+    //----------------------------------------------------------------------------------------------
+
+    private fun datosCorrectos(): Boolean {
+        email=binding.usuario.text.toString().trim()
+//        if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+//            binding.usuario.error="Se esperaba una direccion de email correcta."
+//            return false
+//        }
+        pass=binding.password.text.toString().trim()
+        if(pass.length<6){
+            binding.password.error="Error, la contraseña debe tener al menos 6 caracteres"
+            return false
+        }
+        return true
+    }
+    //----------------------------------------------------------------------------------------------
+
+    private fun crearPerfil(usuario: String, clave: String){
         var p = PerfilModel(
-            1,
-            "Carlos",
-            "Sánchez",
-            "casaro2005@gmail.com",
-            "Carlos",
-            "Carlos")
+            -1,
+            "",
+            "",
+            usuario,
+            usuario,
+            clave)
 
         val id = CrudPerfil().create(p)
     }
@@ -140,12 +177,7 @@ class LoginActivity : AppCompatActivity() {
         if (isValid) {
             // Si la validación es exitosa, navegar al layout del drawer
             irActivityDrawer()
-            // Opcional: Finaliza la actividad actual para que el usuario no pueda regresar
-            finish()
         }
-
-
-
     }
 
     private fun irActivityDrawer() {

@@ -55,9 +55,9 @@ class CrudPerfil {
         return lista
     }
 
-    public fun seekByLogin(login: String): MutableList<PerfilModel>{
-        val lista = mutableListOf<PerfilModel>()
+    public fun seekByLogin(login: String): PerfilModel?{
         val con =Aplicacion.llave.readableDatabase
+        var perfil: PerfilModel? = null
         try{
             val query = "SELECT * FROM " + Aplicacion.TABLA + " WHERE login = ?"
             val cursor = con.rawQuery(
@@ -66,24 +66,21 @@ class CrudPerfil {
             )
 
             if (cursor.moveToFirst()) {
-                while(cursor.moveToNext()){
-                    val contacto=PerfilModel(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5)
-                    )
-                    lista.add(contacto)
-                }
+                perfil=PerfilModel(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5)
+                )
             }
         }catch(ex: Exception){
             ex.printStackTrace()
         }finally {
             con.close()
         }
-        return lista
+        return perfil
     }
 
     public fun borrar(id: Int): Boolean{

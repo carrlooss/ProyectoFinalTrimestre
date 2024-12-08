@@ -82,6 +82,16 @@
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/registrar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="#4CAF50"
+                android:text="Registrar"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
             <!-- Contenedor de los botones de "Limpiar" y "Iniciar con Google" -->
             <LinearLayout
                 android:layout_width="match_parent"

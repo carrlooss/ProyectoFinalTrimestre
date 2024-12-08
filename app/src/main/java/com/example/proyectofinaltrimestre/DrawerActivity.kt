@@ -12,7 +12,7 @@ import com.example.proyectofinaltrimestre.providers.db.CrudPerfil
 
 class DrawerActivity : AppCompatActivity() {
     private lateinit var binding: DrawerLayoutBinding // Asegúrate de que esta clase coincida con tu diseño XML
-    var lista= mutableListOf<PerfilModel>()
+    lateinit var perfil: PerfilModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +51,16 @@ class DrawerActivity : AppCompatActivity() {
     }
 
     private fun loadUser(){
-        lista = CrudPerfil().seekByLogin("Carlos")
+        var perfilAux = CrudPerfil().seekByLogin("Carlos")
+        if (perfilAux != null) {
+            perfil = perfilAux
+        }
     }
 
     private fun irActivityPerfil() {
-        lista = CrudPerfil().read()
-        //lista = CrudPerfil().seekByLogin("Carlos")
+        loadUser()
         val i=Intent(this, PerfilActivity::class.java).apply {
-            putExtra("PERFIL", lista[0])
+            putExtra("PERFIL", perfil)
         }
         startActivity(i)
     }
