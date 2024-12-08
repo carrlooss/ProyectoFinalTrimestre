@@ -8,7 +8,7 @@ data class PerfilModel(
     val apellidos: String,
     val email: String,
     val login: String,
-    val password: String,
+    var password: String,
 ): Serializable
 
 

@@ -120,10 +120,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun datosCorrectos(): Boolean {
         email=binding.usuario.text.toString().trim()
-//        if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-//            binding.usuario.error="Se esperaba una direccion de email correcta."
-//            return false
-//        }
+        if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.usuario.error="Se esperaba una direccion de email correcta."
+            return false
+        }
         pass=binding.password.text.toString().trim()
         if(pass.length<6){
             binding.password.error="Error, la contraseña debe tener al menos 6 caracteres"

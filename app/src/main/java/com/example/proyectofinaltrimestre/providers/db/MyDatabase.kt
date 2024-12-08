@@ -9,8 +9,8 @@ class MyDatabase(): SQLiteOpenHelper(Aplicacion.appContext, Aplicacion.DB, null,
             "id integer primary key autoincrement," +
             "nombre text not null," +
             "apellidos text not null," +
-            "email text not null unique," +
-            "login text not null," +
+            "email text not null," +
+            "login text not null unique," +
             "password text not null);"
 
     override fun onCreate(p0: SQLiteDatabase?) {

@@ -51,10 +51,8 @@ class DrawerActivity : AppCompatActivity() {
     }
 
     private fun loadUser(){
-        var perfilAux = CrudPerfil().seekByLogin("Carlos")
-        if (perfilAux != null) {
-            perfil = perfilAux
-        }
+        val lista = CrudPerfil().read()
+        perfil = lista[0]
     }
 
     private fun irActivityPerfil() {
