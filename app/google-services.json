@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "13795341505",
+    "project_id": "login-ceb46",
+    "storage_bucket": "login-ceb46.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13795341505:android:3d87c6c4a0a544fb9ad040",
+        "android_client_info": {
+          "package_name": "com.example.proyectofinaltrimestre"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMAFwlbLD8kPw-hmj4HyVlHxKQgfN-8TA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

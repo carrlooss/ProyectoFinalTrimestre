@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragments.FragmentMenu">
+
+    <ImageView
+        android:id="@+id/iv_gavi"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/gavi"
+        app:layout_constraintEnd_toStartOf="@id/iv_garnacho"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_garnacho"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:src="@drawable/garnacho"
+        app:layout_constraintEnd_toStartOf="@id/iv_gyokeres"
+        app:layout_constraintStart_toEndOf="@id/iv_gavi"
+        app:layout_constraintTop_toTopOf="@+id/iv_gavi" />
+
+    <ImageView
+        android:id="@+id/iv_gyokeres"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:src="@drawable/gyokeres"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_garnacho"
+        app:layout_constraintTop_toTopOf="@+id/iv_garnacho" />
+</androidx.constraintlayout.widget.ConstraintLayout>
