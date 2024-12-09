@@ -28,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     viewBinding{
         enable = true
@@ -50,21 +50,26 @@ dependencies {
    implementation ("androidx.fragment:fragment-ktx:1.5.7")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
      implementation("com.google.firebase:firebase-analytics")
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     implementation(libs.firebase.auth)
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation ("com.google.firebase:firebase-firestore-ktx")
 
     implementation ("com.google.firebase:firebase-database-ktx")
     implementation ("com.google.firebase:firebase-auth-ktx:22.1.1")
-
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

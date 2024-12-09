@@ -13,50 +13,52 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.example.proyectofinaltrimestre.databinding.LoginLayoutBinding
-import com.example.proyectofinaltrimestre.models.PerfilModel
-import com.example.proyectofinaltrimestre.providers.db.CrudPerfil
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: LoginLayoutBinding
 
+    private lateinit var auth: FirebaseAuth
     private var email = ""
     private var pass = ""
 
-    private  val responseLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if(it.resultCode== RESULT_OK){
-            val datos=GoogleSignIn.getSignedInAccountFromIntent(it.data)
-            try{
-                val cuenta=datos.getResult(ApiException::class.java)
-                if(cuenta!=null){
-                    val credenciales= GoogleAuthProvider.getCredential(cuenta.idToken, null)
-                    FirebaseAuth.getInstance().signInWithCredential(credenciales)
-                        .addOnCompleteListener{
+    private val responseLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val datos = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                try {
+                    val cuenta = datos.getResult(ApiException::class.java)
+                    if (cuenta != null) {
+                        val credenciales = GoogleAuthProvider.getCredential(cuenta.idToken, null)
+                        FirebaseAuth.getInstance().signInWithCredential(credenciales)
+                            .addOnCompleteListener {
 
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
-                        }
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                    }
+                } catch (e: ApiException) {
+                    Log.d("ERROR de API:>>>>", e.message.toString())
                 }
-            }catch(e: ApiException){
-                Log.d("ERROR de API:>>>>", e.message.toString())
+            }
+            if (it.resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "El usuario canceló", Toast.LENGTH_SHORT).show()
             }
         }
-        if(it.resultCode== RESULT_CANCELED){
-            Toast.makeText(this, "El usuario canceló", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     private fun loginGoogle() {
-        val googleConf=GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.app_name))
+        val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.google_app_id))
             .requestEmail()
             .build()
-        val googleClient=GoogleSignIn.getClient(this, googleConf)
+        val googleClient = GoogleSignIn.getClient(this, googleConf)
 
         googleClient.signOut() //Fundamental para que no haga login automatico si he cerrado session
 
@@ -79,6 +81,9 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+
         // Configurar botón Limpiar
         binding.limpiar.setOnClickListener {
             limpiarCampos()
@@ -93,58 +98,59 @@ class LoginActivity : AppCompatActivity() {
             registrar()
         }
 
-        binding.btnGoogleSignIn.setOnClickListener{
+        binding.btnGoogleSignIn.setOnClickListener {
             loginGoogle()
         }
     }
 
     //----------------------------------------------------------------------------------------------
     private fun registrar() {
-        if(!datosCorrectos()) return
+        if (!datosCorrectos()) return
         //datos correctos, procedemos a registar al usuario
-        crearPerfil(email, pass)
-        irActivityDrawer()
+        auth.createUserWithEmailAndPassword(email, pass)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    //si el usuario se ha creado vamos a iniciar sesion con el
+                    login()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
+            }
     }
 
     //----------------------------------------------------------------------------------------------
     private fun login() {
-        if(!datosCorrectos()) return
+        if (!datosCorrectos()) return
         //LOs datos ya estan validados
         //vamos a logear al usuario
-        val p = CrudPerfil().seekByLogin(email)
-        if (p != null && p.password == pass) {
-            irActivityDrawer()
-        }
+        auth.signInWithEmailAndPassword(email, pass)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    //todo ha ido bien
+                    irActivityDrawer()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
+            }
     }
     //----------------------------------------------------------------------------------------------
 
     private fun datosCorrectos(): Boolean {
-        email=binding.usuario.text.toString().trim()
-        if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            binding.usuario.error="Se esperaba una direccion de email correcta."
+        email = binding.usuario.text.toString().trim()
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.usuario.error = "Se esperaba una direccion de email correcta."
             return false
         }
-        pass=binding.password.text.toString().trim()
-        if(pass.length<6){
-            binding.password.error="Error, la contraseña debe tener al menos 6 caracteres"
+        pass = binding.password.text.toString().trim()
+        if (pass.length < 6) {
+            binding.password.error = "Error, la contraseña debe tener al menos 6 caracteres"
             return false
         }
         return true
     }
     //----------------------------------------------------------------------------------------------
-
-    private fun crearPerfil(usuario: String, clave: String){
-        var p = PerfilModel(
-            -1,
-            "",
-            "",
-            usuario,
-            usuario,
-            clave)
-
-        val id = CrudPerfil().create(p)
-    }
-
 
     // Método para limpiar los campos
     private fun limpiarCampos() {
@@ -184,5 +190,12 @@ class LoginActivity : AppCompatActivity() {
         startActivity(Intent(this, DrawerActivity::class.java))
     }
 
-
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            irActivityDrawer()
+        }
+    }
 }

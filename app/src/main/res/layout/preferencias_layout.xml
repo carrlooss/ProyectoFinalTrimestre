@@ -40,64 +40,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewInfo" />
 
-    <RadioGroup
-        android:id="@+id/radioGroupOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="34dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewInfo">
-
-        <RadioButton
-            android:id="@+id/radioOption1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opción 1" />
-
-        <RadioButton
-            android:id="@+id/radioOption2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opción 2" />
-
-        <RadioButton
-            android:id="@+id/radioOption3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opción 3" />
-    </RadioGroup>
-
-    <LinearLayout
-        android:id="@+id/checkBoxGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/radioGroupOptions">
-
-        <CheckBox
-            android:id="@+id/checkBoxOption1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opción de CheckBox 1" />
-
-        <CheckBox
-            android:id="@+id/checkBoxOption2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opción de CheckBox 2" />
-
-        <CheckBox
-            android:id="@+id/checkBoxOption3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opción de CheckBox 3" />
-    </LinearLayout>
-
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="0dp"
@@ -106,7 +48,7 @@
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkBoxGroup" />
+        app:layout_constraintTop_toBottomOf="@id/spinnerOptions" />
 
     <TextView
         android:id="@+id/seekBarValue"

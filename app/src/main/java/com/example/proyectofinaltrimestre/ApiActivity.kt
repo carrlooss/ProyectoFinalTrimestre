@@ -1,8 +1,10 @@
 package com.example.proyectofinaltrimestre
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,7 +14,7 @@ import com.example.proyectofinaltrimestre.databinding.ApiLayoutBinding
 import com.example.proyectofinaltrimestre.providers.db.MarvelApiClient
 import kotlinx.coroutines.runBlocking
 import com.example.proyectofinaltrimestre.models.Character
-import com.example.recyclersqlite041124.adapters.ApiAdapter
+import com.example.proyectofinaltrimestre.adapters.ApiAdapter
 
 class ApiActivity : AppCompatActivity() {
 
@@ -43,7 +45,7 @@ class ApiActivity : AppCompatActivity() {
         val layoutManger= LinearLayoutManager(this)
         binding.recyclerView.layoutManager=layoutManger
         traerRegistros()
-        adapter= ApiAdapter(lista)
+        adapter=ApiAdapter(lista, { image->verImagen(image)})
         binding.recyclerView.adapter=adapter
     }
 
@@ -59,16 +61,18 @@ class ApiActivity : AppCompatActivity() {
                 // Obtener personajes que comienzan con "Spider"
                 var response = apiClient.getCharacters(nameStartsWith = "Spider")
                 lista = response.data.results.toMutableList()
-//                if(lista.size>0){
-//                    binding.api.visibility=View.INVISIBLE
-//                }else{
-//                    binding.api.visibility=View.VISIBLE
-//                }
 
             } catch (e: Exception) {
                 println("Error: ${e.message}")
             }
         }
+    }
+
+    private fun verImagen(imageURL: String){
+        val i= Intent(this, VerImagenActivity::class.java).apply {
+            putExtra("IMAGEN", imageURL)
+        }
+        startActivity(i)
     }
 
 }

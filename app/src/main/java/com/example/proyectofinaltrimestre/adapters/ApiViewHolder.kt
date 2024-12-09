@@ -1,4 +1,4 @@
-package com.example.recyclersqlite041124.adapters
+package com.example.proyectofinaltrimestre.adapters
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +10,8 @@ import com.example.proyectofinaltrimestre.R
 class ApiViewHolder(v: View): RecyclerView.ViewHolder(v) {
     val binding  = CharacterLayoutBinding.bind(v)
     fun render(
-        c: Character
+        c: Character,
+        verImagen: (String) -> Unit
     ){
         binding.tvName.setText (c.name)
         binding.tvDescription.setText(c.description)
@@ -21,6 +22,10 @@ class ApiViewHolder(v: View): RecyclerView.ViewHolder(v) {
             .placeholder(R.drawable.cargando)
             .error(R.drawable.errorr)
             .into(binding.ivImage)
+
+        binding.ivImage.setOnClickListener {
+            verImagen(imageUrl)
+        }
     }
 
 }

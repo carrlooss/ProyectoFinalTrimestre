@@ -7,12 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.proyectofinaltrimestre.databinding.DrawerLayoutBinding
-import com.example.proyectofinaltrimestre.models.PerfilModel
-import com.example.proyectofinaltrimestre.providers.db.CrudPerfil
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class DrawerActivity : AppCompatActivity() {
     private lateinit var binding: DrawerLayoutBinding // Asegúrate de que esta clase coincida con tu diseño XML
-    lateinit var perfil: PerfilModel
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,9 @@ class DrawerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Initialize Firebase Auth
+        auth = Firebase.auth
 
         binding.botonPerfil.setOnClickListener {
             irActivityPerfil()
@@ -44,22 +48,18 @@ class DrawerActivity : AppCompatActivity() {
         binding.botonFragment.setOnClickListener {
             irActivityFragment()
         }
+
+        binding.btnLogout.setOnClickListener{
+            logout()
+        }
     }
 
     private fun irActivityMapa() {
         startActivity(Intent(this, MapaActivity::class.java))
     }
 
-    private fun loadUser(){
-        val lista = CrudPerfil().read()
-        perfil = lista[0]
-    }
-
     private fun irActivityPerfil() {
-        loadUser()
-        val i=Intent(this, PerfilActivity::class.java).apply {
-            putExtra("PERFIL", perfil)
-        }
+        val i=Intent(this, PerfilActivity::class.java).apply {}
         startActivity(i)
     }
 
@@ -74,6 +74,13 @@ class DrawerActivity : AppCompatActivity() {
 
     private fun irActivityFragment(){
         val i=Intent(this, FragmentActiity::class.java).apply {}
+        startActivity(i)
+    }
+
+    fun logout() {
+        // Cerrar sesión
+        auth.signOut()
+        val i=Intent(this, LoginActivity::class.java).apply {}
         startActivity(i)
     }
 }
